@@ -1,4 +1,5 @@
 import Message from '../models/Message.js';
+import axios from 'axios';
 
 export const getMessages = async (req, res) => {
     try {
@@ -19,5 +20,14 @@ export const sendMessage = async (req, res) => {
         res.status(201).json(newMessage);
     } catch (error) {
         res.status(409).json({ message: error.message });
+    }
+}
+
+export const randomAnswer = async (req, res) => {
+    try {
+        const response = await axios.get('https://api.adviceslip.com/advice');
+        res.status(200).json(response.data);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
     }
 }
