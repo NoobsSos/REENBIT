@@ -35,9 +35,10 @@ const ChatList = () => {
         setSearchText(e.target.value);
     };
 
-    const filteredChats = chats.filter(chat =>
-        chat.firstName.toLowerCase().includes(searchText.toLowerCase())
-    );
+    const filteredChats = chats.filter(chat => {
+        const fullName = `${chat.firstName} ${chat.lastName}`.toLowerCase();
+        return fullName.includes(searchText.toLowerCase());
+    });
 
     const selectingChat = (chat) => {
         if (selectedChat && selectedChat._id === chat._id) {
@@ -93,7 +94,7 @@ const ChatList = () => {
                 <div className={styles.profile}>
                     <img src={profile_pic} className={styles.profile_pic}  alt="profile" />
                     <div className={styles.button}>
-                        {user ? <button onClick={() => setIsOpen(true)} className={styles.login}>New chat</button> 
+                        {user ? <button onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)} className={styles.login}>New chat</button> 
                                     : 
                                 <button onClick={() => navigate('/login')} className={styles.login}>Log In</button>}
                         {user && <button onClick={() => dispatch(logOut())} className={styles.login}>Log Out</button>}

@@ -2,13 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     selectedChat: null,
-    chats: [
-        { id: 1, name: 'Chat with Alice' },
-        { id: 2, name: 'Chat with Bob' },
-        { id: 3, name: 'Chat with Charlie' },
-        { id: 4, name: 'Chat with Dave' },
-        { id: 5, name: 'Chat with Eve' }
-    ],
+    chats: null,
     user: null,
 };
 
@@ -37,6 +31,7 @@ export const chatSlice = createSlice({
         },
         setUser: (state, action) => {
             state.user = action.payload.user;
+            state.selectedChat = null;
         },
         logOut: (state) => {
             state.user = null;

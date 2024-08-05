@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 
 import styles from "./Chat.module.css";
@@ -34,6 +35,11 @@ const Chat = () => {
     };
 
     const deleteChat = async () => {
+        if (!user) {
+            toast.error("You need to be logged in to delete a chat.");
+            return;
+        }
+
         await chatService.deleteChat(selectedChat._id);
         dispatch(selectChat({ selectedChat: null }));
 
@@ -53,24 +59,27 @@ const Chat = () => {
         fetchMessages();
     }, [selectedChat]);
 
-    const sendAnswer = async () => {
+    const sendAnswer = async (selectedChat) => {
         try {
-            const response = await axios.get('https://api.adviceslip.com/advice');
+            const response = await messageService.randomAnswer();
             setMessages(prevMessages => [
                 ...prevMessages, 
                 { id: prevMessages.length + 1, text: response.data.slip.advice, sender: selectedChat._id }
             ]);
 
             await messageService.sendMessage({ sender: selectedChat._id, receiver: user, text: response.data.slip.advice });
+
+            toast.success('New message!')
         } catch (error) {
             console.error("Error fetching advice:", error);
         }
     };
 
     useEffect(() => {
+        const selectedChatAtSendingMoment = selectedChat;
         setTimeout(() => {
             if (messages.length > 0 && messages[messages.length - 1].sender === user) {
-                sendAnswer();
+                sendAnswer(selectedChatAtSendingMoment);
             }
         }, 3000);
     }, [messages]);
@@ -86,6 +95,10 @@ const Chat = () => {
                             <h2 className={styles.username}>{selectedChat.firstName} {selectedChat.lastName}</h2>
                         </div>
                         <button onClick={() => deleteChat()} className={styles.button}>Delete chat</button>
+                        <Toaster
+                            position="top-right"
+                            reverseOrder={false}
+                            />
                     </div>
 
                     <Messages messages={messages}/>
