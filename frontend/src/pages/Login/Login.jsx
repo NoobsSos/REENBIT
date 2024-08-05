@@ -4,8 +4,11 @@ import { setUser } from '../../store/index.js';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import styles from './Login.module.css';
 
-const Login = (props) => {
+import arrow from '../../assets/images.png';
+
+const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,7 +24,10 @@ const Login = (props) => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
+        <h1 className={styles.title}>Login</h1>
+        <h2 className={styles.text}>You can use the following method </h2>
+        <img src={arrow} alt="arrow" className={styles.arrow} />
         <FacebookLogin 
             appId="803147245138418"
             autoLoad={false}
