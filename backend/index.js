@@ -19,8 +19,8 @@ app.use(cors());
 
 connectDB();
 
-app.use('api/v1/messages', messageRouter);
-app.use('api/v1/chats', chatRouter);
+app.use('/api/v1/messages', messageRouter);
+app.use('/api/v1/chats', chatRouter);
 
 const PORT = process.env.PORT || 5000;
 
